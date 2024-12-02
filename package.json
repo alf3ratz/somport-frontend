@@ -23,7 +23,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint:es": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "lint:es:fix": "npm run lint:es -- --fix"
+    "lint:es:fix": "npm run lint:es -- --fix",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +46,8 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^6.2.0",
     "stylelint-config-prettier": "^9.0.5"
-  }
+  },
+  "homepage": "https://alf3ratz.github.io/somport-frontend"
 }
