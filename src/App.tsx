@@ -8,11 +8,12 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<LoginPage />} />
-        <Route path='/home' element={<HomePage />} />
+        <Route path='/somport-frontend/' element={<LoginPage />} />
+        <Route path='/somport-frontend/home' element={<HomePage />} />
       </Routes>
     </Router>
   )
 }
+//ds
 
 export default App
