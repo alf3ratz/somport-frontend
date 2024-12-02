@@ -7,7 +7,10 @@ on:
 
 jobs:
   deploy:
-    runs-on: node12 # Выберите нужную версию Node.js (или любую подходящую версию)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
 
     steps:
       - name: Checkout code
@@ -16,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14' # Укажите нужную версию Node.js
+          node-version: '21' # Укажите нужную версию Node.js
 
       - name: Install dependencies
         run: npm install # Устанавливаем зависимости
