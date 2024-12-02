@@ -1,0 +1,30 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Этот action будет запускаться при пуше в ветку main
+
+jobs:
+  deploy:
+    runs-on: node12 # Выберите нужную версию Node.js (или любую подходящую версию)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2 # Пулл репозитория
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Укажите нужную версию Node.js
+
+      - name: Install dependencies
+        run: npm install # Устанавливаем зависимости
+
+      - name: Build the app
+        run: npm run build # Строим приложение
+
+      - name: Deploy to GitHub Pages
+        run: npm run deploy # Деплой с помощью gh-pages
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} # Используем секретный токен для деплоя
