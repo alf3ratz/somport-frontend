@@ -27,7 +27,15 @@ jobs:
       - name: Build the app
         run: npm run build # Строим приложение
 
-      - name: Deploy to GitHub Pages
-        run: npm run deploy # Деплой с помощью gh-pages
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }} # Используем секретный токен для деплоя
+      - name: upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./build
+
+      - name: deploy to github pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+      # - name: Deploy to GitHub Pages
+      #   run: npm run deploy # Деплой с помощью gh-pages
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }} # Используем секретный токен для деплоя
