@@ -1,0 +1,5 @@
+// .eslintignore
+
+**/App.tsx
+.prettierrc
+package.json
