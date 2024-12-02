@@ -1,0 +1,40 @@
+/* Fish.css */
+
+.fish {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #1e90ff;
+  /*clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Треугольная форма рыбы */
+  /* transform: rotate(90deg); */
+  /*animation: swim 5s linear infinite; /* Анимация плавания */
+  animation: sway 3s ease-in-out infinite; /* Добавляем анимацию покачивания */
+  background-image: url('~/public/images/fish.svg');
+  background-size: cover; /* Чтобы фон заполнил весь элемент */
+  background-position: center;
+}
+
+/* Анимация для плавания рыб */
+@keyframes swim {
+  0% {
+    transform: translateX(-100px); /* Начальная позиция за пределами экрана слева */
+  }
+  50% {
+    transform: translateX(100vw); /* Двигается вправо на всю ширину экрана */
+  }
+  100% {
+    transform: translateX(-100px); /* Возвращается в начальную позицию */
+  }
+}
+
+@keyframes sway {
+  0% {
+    transform: rotate(90deg) translateX(0); /* Начальная позиция */
+  }
+  50% {
+    transform: rotate(100deg) translateY(-5px); /* Поворот и легкое поднятие */
+  }
+  100% {
+    transform: rotate(90deg) translateX(0); /* Возвращаем в исходное положение */
+  }
+}

@@ -1,15 +1,15 @@
 import React from 'react'
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route,Routes } from 'react-router-dom'
 import LoginPage from './components/LoginPage'
 import HomePage from './components/HomePage'
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <Router basename="/somport-frontend">
       <Routes>
-        <Route path='/somport-frontend/' element={<LoginPage />} />
-        <Route path='/somport-frontend/home' element={<HomePage />} />
+        <Route path='/' element={<LoginPage />} />
+        <Route path='/home' element={<HomePage />} />
       </Routes>
     </Router>
   )
