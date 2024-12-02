@@ -12,6 +12,7 @@ jobs:
       pages: write
       id-token: write
     runs-on: ubuntu-latest
+    environment: production
     strategy:
       matrix:
         node-version: [12.x]
