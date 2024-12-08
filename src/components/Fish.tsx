@@ -1,5 +1,9 @@
-// Fish.tsx
+// Fish.tsx // Путь к JSON анимации
+import Lottie from 'lottie-react'
 import React, { useEffect, useState } from 'react'
+
+import animationData from './lottie-animation.json'
+
 import './fish.css'
 
 interface FishProps {
@@ -27,14 +31,35 @@ const Fish: React.FC<FishProps> = ({ color }) => {
   }, [])
 
   return (
+    // <div
+    //   className='fish'
+    //   style={{
+    //     backgroundColor: color,
+    //     top: `${position.top}%`, // Преобразуем в проценты
+    //     left: `${position.left}%`, // Преобразуем в проценты
+    //   }}
+    // ></div>
     <div
-      className='fish'
-      style={{
-        backgroundColor: color,
-        top: `${position.top}%`, // Преобразуем в проценты
-        left: `${position.left}%`, // Преобразуем в проценты
-      }}
-    ></div>
+      className='absolute justify-center items-center min-h-screen bg-gray-200'
+      // style={{
+      //   backgroundColor: color,
+      //   top: `${position.top}%`, // Преобразуем в проценты
+      //   left: `${position.left}%`, // Преобразуем в проценты
+      // }}
+    >
+      <Lottie
+        animationData={animationData} // Данные анимации из JSON
+        loop={true}
+        autoplay={true}
+        renderer='svg'
+        style={{
+          width: '50px',
+          height: '50px',
+          top: `${position.top}%`, // Преобразуем в проценты
+          left: `${position.left}%`,
+        }}
+      />
+    </div>
   )
 }
 

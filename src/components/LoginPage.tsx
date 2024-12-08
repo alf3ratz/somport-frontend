@@ -16,11 +16,10 @@ const LoginPage: React.FC = () => {
   ]
   const [username, setUsername] = useState('qw')
   const [password, setPassword] = useState('qw')
-  const navigate = useNavigate() // Используем useNavigate
+  const navigate = useNavigate()
 
   const handleLogin = () => {
     if (username === 'user' && password === 'password') {
-      // Простой пример проверки логина
       navigate('/home') // Переход на главную страницу
     } else {
       alert('Неверный логин или пароль')
@@ -28,30 +27,50 @@ const LoginPage: React.FC = () => {
   }
 
   return (
-    <div className='login-page'>
-      {/* Блок с рыбами, которые двигаются горизонтально */}
-      <div className='fish-background'>
+    <div className='h-screen flex flex-col justify-center items-center bg-gradient-to-b from-blue-500 to-indigo-600'>
+      {/* Фон с рыбами */}
+      <div className='absolute top-0 left-0 right-0 bottom-0 z-0 overflow-hidden'>
         {fishData.map((fish, index) => (
           <Fish key={index} color={fish.color} />
         ))}
       </div>
 
       {/* Форма логина */}
-      <div className='form-container'>
-        <h2>Вход в систему</h2>
-        <div>
-          <label>
+      <div className='relative z-10 bg-white p-8 rounded-lg shadow-xl w-96 max-w-full'>
+        <h2 className='text-2xl font-semibold text-center mb-6 text-indigo-600'>Вход в систему</h2>
+
+        <div className='mb-4'>
+          <label className='block text-gray-700 font-medium' htmlFor='username'>
             Логин:
-            <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} />
           </label>
+          <input
+            id='username'
+            type='text'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className='w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'
+          />
         </div>
-        <div>
-          <label>
+
+        <div className='mb-6'>
+          <label className='block text-gray-700 font-medium' htmlFor='password'>
             Пароль:
-            <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
           </label>
+          <input
+            id='password'
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className='w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'
+          />
         </div>
-        <button onClick={handleLogin}>Войти</button>
+
+        <button
+          onClick={handleLogin}
+          className='w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+        >
+          Войти
+        </button>
       </div>
     </div>
   )
