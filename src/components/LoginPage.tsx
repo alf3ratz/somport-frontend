@@ -14,15 +14,96 @@ const LoginPage: React.FC = () => {
     { color: '#FFD700' },
     { color: '#8A2BE2' },
   ]
-  const [username, setUsername] = useState('qw')
-  const [password, setPassword] = useState('qw')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false) // Для индикатора загрузки
+  const [error, setError] = useState<string>('') // Для ошибок
   const navigate = useNavigate()
+  const apiUrl = 'http://localhost:8080'
+  //process.env.REACT_APP_API_URL
 
-  const handleLogin = () => {
-    if (username === 'user' && password === 'password') {
-      navigate('/home') // Переход на главную страницу
-    } else {
-      alert('Неверный логин или пароль')
+  // const handleLogin = () => {
+  //   if (username === 'user' && password === 'password') {
+  //     navigate('/home') // Переход на главную страницу
+  //   } else {
+  //     alert('Неверный логин или пароль')
+  //   }
+  // }
+
+  // Функция для отправки запроса на сервер для проверки логина и пароля
+  const handleLogin = async () => {
+    setLoading(true)
+    setError('') // Сбросить ошибки перед новым запросом
+
+    try {
+      const response = await fetch(`${apiUrl}/api/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      })
+
+      // if (!response.ok) {
+      //   throw new Error('Ошибка при подключении к серверу')
+      // }
+
+      const data = await response.json()
+      if (data.message !== null && !response.ok) {
+        alert(data.message)
+        setError(data.message)
+      }
+      // Проверка ответа API
+      if (response.ok && data.username !== null) {
+        navigate('/home')
+      } else {
+        setError('Неверный логин или пароль')
+      }
+    } catch (err) {
+      setError('Не удалось выполнить запрос')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleRegister = async () => {
+    setLoading(true)
+    setError('') // Сбросить ошибки перед новым запросом
+
+    try {
+      const response = await fetch(`${apiUrl}/api/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Ошибка при подключении к серверу')
+      }
+
+      const data = await response.json()
+      if (data.message !== null && !response.ok) {
+        alert(data.message)
+        setError(data.message)
+      }
+      // Проверка ответа API
+      if (response.ok && data.username !== null) {
+        navigate('/home')
+      } else {
+        setError('Неверный логин или пароль')
+      }
+    } catch (err) {
+      setError('Не удалось выполнить запрос')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -70,6 +151,12 @@ const LoginPage: React.FC = () => {
           className='w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500'
         >
           Войти
+        </button>
+        <button
+          onClick={handleRegister}
+          className='w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+        >
+          Регистрация
         </button>
       </div>
     </div>
