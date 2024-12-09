@@ -16,25 +16,14 @@ const LoginPage: React.FC = () => {
   ]
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false) // Для индикатора загрузки
-  const [error, setError] = useState<string>('') // Для ошибок
+  // const [loading, setLoading] = useState(false) // Для индикатора загрузки
+  // const [error, setError] = useState<string>('') // Для ошибок
   const navigate = useNavigate()
   const apiUrl = 'http://localhost:8080'
   //process.env.REACT_APP_API_URL
 
-  // const handleLogin = () => {
-  //   if (username === 'user' && password === 'password') {
-  //     navigate('/home') // Переход на главную страницу
-  //   } else {
-  //     alert('Неверный логин или пароль')
-  //   }
-  // }
-
   // Функция для отправки запроса на сервер для проверки логина и пароля
   const handleLogin = async () => {
-    setLoading(true)
-    setError('') // Сбросить ошибки перед новым запросом
-
     try {
       const response = await fetch(`${apiUrl}/api/users/login`, {
         method: 'POST',
@@ -54,25 +43,18 @@ const LoginPage: React.FC = () => {
       const data = await response.json()
       if (data.message !== null && !response.ok) {
         alert(data.message)
-        setError(data.message)
       }
       // Проверка ответа API
       if (response.ok && data.username !== null) {
         navigate('/home')
-      } else {
-        setError('Неверный логин или пароль')
       }
     } catch (err) {
-      setError('Не удалось выполнить запрос')
+      alert('Ошибка')
     } finally {
-      setLoading(false)
     }
   }
 
   const handleRegister = async () => {
-    setLoading(true)
-    setError('') // Сбросить ошибки перед новым запросом
-
     try {
       const response = await fetch(`${apiUrl}/api/users/register`, {
         method: 'POST',
@@ -92,18 +74,14 @@ const LoginPage: React.FC = () => {
       const data = await response.json()
       if (data.message !== null && !response.ok) {
         alert(data.message)
-        setError(data.message)
       }
       // Проверка ответа API
       if (response.ok && data.username !== null) {
         navigate('/home')
-      } else {
-        setError('Неверный логин или пароль')
       }
     } catch (err) {
-      setError('Не удалось выполнить запрос')
+      alert('Ошибка')
     } finally {
-      setLoading(false)
     }
   }
 
