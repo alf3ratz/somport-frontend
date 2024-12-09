@@ -12,8 +12,8 @@ interface FishProps {
 
 const Fish: React.FC<FishProps> = ({ color }) => {
   const [position, setPosition] = useState<{ top: number; left: number }>({
-    top: 0,
-    left: 0,
+    top: Math.random() * 90, // Изначальная случайная позиция
+    left: Math.random() * 100, // Изначальная случайная позиция
   })
 
   useEffect(() => {
@@ -24,28 +24,22 @@ const Fish: React.FC<FishProps> = ({ color }) => {
       setPosition({ top: randomTop, left: randomLeft })
     }
 
-    generateRandomPosition()
-    const interval = setInterval(generateRandomPosition, 3000) // Каждые 3 секунды обновляем позицию
+    // Генерация случайной позиции каждый 3 секунды
+    const interval = setInterval(generateRandomPosition, 3000)
 
-    return () => clearInterval(interval) // Очистка интервала при удалении компонента
+    // Очистка интервала при удалении компонента
+    return () => clearInterval(interval)
   }, [])
 
   return (
-    // <div
-    //   className='fish'
-    //   style={{
-    //     backgroundColor: color,
-    //     top: `${position.top}%`, // Преобразуем в проценты
-    //     left: `${position.left}%`, // Преобразуем в проценты
-    //   }}
-    // ></div>
     <div
-      className='absolute justify-center items-center min-h-screen bg-gray-200'
-      // style={{
-      //   backgroundColor: color,
-      //   top: `${position.top}%`, // Преобразуем в проценты
-      //   left: `${position.left}%`, // Преобразуем в проценты
-      // }}
+      className='relative'
+      style={{
+        top: `${position.top}%`, // Позиция по вертикали
+        left: `${position.left}%`, // Позиция по горизонтали
+        transform: 'translate(-50%, -50%)', // Центрирование по X и Y для точности
+        pointerEvents: 'none', // Чтобы рыбы не блокировали другие элементы на странице
+      }}
     >
       <Lottie
         animationData={animationData} // Данные анимации из JSON
@@ -53,10 +47,8 @@ const Fish: React.FC<FishProps> = ({ color }) => {
         autoplay={true}
         renderer='svg'
         style={{
-          width: '50px',
-          height: '50px',
-          top: `${position.top}%`, // Преобразуем в проценты
-          left: `${position.left}%`,
+          width: '150px', // Размер анимации
+          height: '150px', // Размер анимации
         }}
       />
     </div>
