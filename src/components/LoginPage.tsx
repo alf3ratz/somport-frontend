@@ -6,13 +6,17 @@ import Fish from './Fish'
 import './loginpage.css'
 
 const LoginPage: React.FC = () => {
-  const fishData = [
-    { color: '#1E90FF' },
-    { color: '#FF6347' },
-    { color: '#32CD32' },
-    { color: '#FFD700' },
-    { color: '#8A2BE2' },
-  ]
+  const fishData = []
+  // const fishData = [
+  //   { color: '#1E90FF' },
+  //   { color: '#FF6347' },
+  //   { color: '#32CD32' },
+  //   { color: '#FFD700' },
+  //   { color: '#8A2BE2' },
+  // ]
+  for (let i = 0; i < 100; i++) {
+    fishData.push({ color: '#1E90FF' })
+  }
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')

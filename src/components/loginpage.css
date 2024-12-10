@@ -17,7 +17,7 @@
 
 .min-h-screen {
   min-height: 100vh;
-  min-width: 500vh;
+  min-width: 100vw;
 }
 
 .bg-gradient-to-b {

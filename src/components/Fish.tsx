@@ -11,16 +11,20 @@ interface FishProps {
 }
 
 const Fish: React.FC<FishProps> = ({ color }) => {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  })
   const [position, setPosition] = useState<{ top: number; left: number }>({
-    top: Math.random() * 90, // Изначальная случайная позиция
-    left: Math.random() * 100, // Изначальная случайная позиция
+    top: Math.random() * (windowSize.height - 150), // Изначальная случайная позиция
+    left: Math.random() * (windowSize.width - 150), // Изначальная случайная позиция
   })
 
   useEffect(() => {
     // Функция для генерации случайных позиций
     const generateRandomPosition = () => {
-      const randomTop = Math.random() * 90 // Случайная позиция по вертикали от 0% до 90% высоты
-      const randomLeft = Math.random() * 100 // Случайная позиция по горизонтали от 0% до 100% ширины
+      const randomTop = Math.random() * (windowSize.height - 150) // Случайная позиция по вертикали от 0% до 90% высоты
+      const randomLeft = Math.random() * (windowSize.width - 150) // Случайная позиция по горизонтали от 0% до 100% ширины
       setPosition({ top: randomTop, left: randomLeft })
     }
 
@@ -35,9 +39,9 @@ const Fish: React.FC<FishProps> = ({ color }) => {
     <div
       className='relative'
       style={{
-        top: `${position.top}%`, // Позиция по вертикали
-        left: `${position.left}%`, // Позиция по горизонтали
-        transform: 'translate(-50%, -50%)', // Центрирование по X и Y для точности
+        top: `${position.top}px`, // Позиция по вертикали
+        left: `${position.left}px`, // Позиция по горизонтали
+        //transform: 'translate(-50%, -50%)', // Центрирование по X и Y для точности
         pointerEvents: 'none', // Чтобы рыбы не блокировали другие элементы на странице
       }}
     >
