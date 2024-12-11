@@ -1,19 +1,21 @@
 import React from 'react'
-import './App.css'
-import { BrowserRouter as Router, Route,Routes } from 'react-router-dom'
-import LoginPage from './components/LoginPage'
-import HomePage from './components/HomePage'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-const App: React.FC = () => {
-  return (
-    <Router basename="/somport-frontend">
-      <Routes>
-        <Route path='/' element={<LoginPage />} />
-        <Route path='/home' element={<HomePage />} />
-      </Routes>
-    </Router>
-  )
-}
-//ds
+import AppLayout from './components/Layout'
 
-export default App
+import Home from './pages/Users'
+
+import Users from './pages/Users'
+
+const App: React.FC = () => (
+  <Router>
+    <Routes>
+      <Route path="/" element={<AppLayout />}>
+        <Route index element={<Home />} />
+        <Route path="users" element={<Users />} />
+      </Route>
+    </Routes>
+  </Router>
+);
+
+export default App;
