@@ -1,30 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 const VideoStream: React.FC = () => {
+  const [currentStream, setCurrentStream] = useState<'stream_1' | 'stream_2'>('stream_1')
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const videoRef = useRef<HTMLImageElement | null>(null)
   const socketRef = useRef<WebSocket | null>(null)
 
   useEffect(() => {
-    console.log('🔄 Подключение к WebSocket...')
-    socketRef.current = new WebSocket('ws://localhost:8080/video-stream')
+    // Закрываем предыдущее соединение
+    if (socketRef.current) {
+      socketRef.current.close()
+    }
 
-    // Указываем, что ожидаем бинарные данные
-    socketRef.current.binaryType = 'arraybuffer'
+    console.log(`🔄 Подключение к ${currentStream}...`)
+    const wsUrl = `ws://localhost:8080/video-stream/${currentStream}`
+    const socket = new WebSocket(wsUrl)
+    socketRef.current = socket
 
-    socketRef.current.onopen = () => {
-      console.log('✅ WebSocket подключен!')
+    socket.binaryType = 'arraybuffer'
+
+    socket.onopen = () => {
+      console.log(`✅ Подключено к ${currentStream}`)
       setIsConnected(true)
     }
 
-    socketRef.current.onmessage = (event: MessageEvent) => {
+    socket.onmessage = (event: MessageEvent) => {
       if (event.data instanceof ArrayBuffer) {
-        console.log('📩 Получены бинарные данные', event.data.byteLength)
-
-        // Создаем Blob из массива байтов
         const blob = new Blob([event.data], { type: 'image/jpeg' })
-
-        // Создаем URL для изображения и обновляем src
         const imageUrl = URL.createObjectURL(blob)
         if (videoRef.current) {
           videoRef.current.src = imageUrl
@@ -32,26 +34,58 @@ const VideoStream: React.FC = () => {
       }
     }
 
-    socketRef.current.onclose = (event) => {
-      console.log('❌ WebSocket закрыт', event)
+    socket.onclose = (event) => {
+      console.log(`❌ Соединение с ${currentStream} закрыто`, event)
       setIsConnected(false)
     }
 
-    socketRef.current.onerror = (err) => {
-      console.error('🚨 WebSocket ошибка:', err)
+    socket.onerror = (err) => {
+      console.error(`🚨 Ошибка в ${currentStream}:`, err)
       setIsConnected(false)
     }
 
     return () => {
-      if (socketRef.current) {
-        socketRef.current.close()
-      }
+      socket.close()
     }
-  }, [])
+  }, [currentStream])
+
+  const handleStreamSelect = (stream: 'stream_1' | 'stream_2') => {
+    setCurrentStream(stream)
+  }
 
   return (
     <div>
-      <h1>📡 Live Video Stream</h1>
+      <div>
+        <button
+          onClick={() => handleStreamSelect('stream_1')}
+          style={{
+            backgroundColor: currentStream === 'stream_1' ? '#4CAF50' : '#ddd',
+            color: 'white',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            marginRight: '10px',
+          }}
+        >
+          Stream 1
+        </button>
+        <button
+          onClick={() => handleStreamSelect('stream_2')}
+          style={{
+            backgroundColor: currentStream === 'stream_2' ? '#4CAF50' : '#ddd',
+            color: 'white',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+          }}
+        >
+          Stream 2
+        </button>
+      </div>
+
+      <h1>📡 Live Video Stream - {currentStream}</h1>
       <p>{isConnected ? '🟢 Подключено' : '🟠 Подключение...'}</p>
       <img ref={videoRef} alt='Video Stream' width='640' height='480' />
     </div>
