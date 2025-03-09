@@ -22,21 +22,28 @@ function App() {
     //     <Route path='/home' element={<HomePage />} />
     //   </Routes>
     // </Router>
-    <AuthProvider> {/* Теперь с корректной типизацией */}
-      <Router>
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="/auth" element={<AuthPage />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+    // <AuthProvider> {/* Теперь с корректной типизацией */}
+    //   <Router>
+    //     <Routes>
+    //       <Route 
+    //         path="/" 
+    //         element={
+    //           <ProtectedRoute>
+    //             <Dashboard />
+    //           </ProtectedRoute>
+    //         } 
+    //       />
+    //       <Route path="/auth" element={<AuthPage />} />
+    //     </Routes>
+    //   </Router>
+    // </AuthProvider>
+    <Router basename="/">
+      <Routes>
+        <Route path='/' element={<AuthPage />} />
+        <Route path='/home' element={<Dashboard />} />
+        <Route path='/video' element={<VideoPlayer />} />
+      </Routes>
+</Router>
 );
 }
 
