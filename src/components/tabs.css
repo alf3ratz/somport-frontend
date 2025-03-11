@@ -43,7 +43,7 @@
   border: 1px solid #eee;
   border-radius: 4px;
   background: #fafafa;
-  margin-left: 20px; /* Отступ слева */
+  margin-left: 20px;
 }
 
 .tab-panel {
