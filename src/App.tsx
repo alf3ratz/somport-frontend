@@ -1,7 +1,7 @@
 // App.tsx
 import React, { useEffect, useRef } from 'react';
 
-import VideoPlayer from './VideoStream';
+import VideoStream from './components/VideoStream';
 import { BrowserRouter as Router, Route,Routes } from 'react-router-dom'
 import LoginPage from './components/LoginPage'
 import HomePage from './components/HomePage'
@@ -41,7 +41,7 @@ function App() {
       <Routes>
         <Route path='/' element={<AuthPage />} />
         <Route path='/home' element={<Dashboard />} />
-        <Route path='/video' element={<VideoPlayer />} />
+        <Route path='/video' element={<VideoStream />} />
       </Routes>
 </Router>
 );
