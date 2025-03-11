@@ -1,0 +1,59 @@
+/* Контейнер для вертикальных табов */
+.vertical-tabs-container {
+  display: flex;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Стили для вертикальных кнопок */
+.vertical-tabs {
+  display: flex;
+  flex-direction: column; /* Размещаем кнопки вертикально */
+  gap: 10px;
+  border-right: 2px solid #eee; /* Граница справа */
+  padding-right: 20px; /* Отступ справа */
+  min-width: 150px; /* Минимальная ширина для кнопок */
+}
+
+.vertical-tab-button {
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  border-right: 2px solid transparent; /* Активная граница */
+  cursor: pointer;
+  font-size: 16px;
+  text-align: left; /* Выравнивание текста по левому краю */
+  transition: all 0.2s;
+}
+
+.vertical-tab-button.active {
+  border-right-color: #2196f3; /* Цвет активной границы */
+  color: #2196f3; /* Цвет текста активной кнопки */
+  font-weight: bold; /* Жирный шрифт для активной кнопки */
+}
+
+.vertical-tab-button:hover {
+  border-right-color: #64b5f6; /* Цвет границы при наведении */
+}
+
+/* Содержимое активной вкладки */
+.tab-content {
+  flex-grow: 1; /* Занимает оставшееся пространство */
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background: #fafafa;
+  margin-left: 20px; /* Отступ слева */
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+.tab-panel:not([hidden]) {
+  display: block;
+}

@@ -9,7 +9,7 @@ interface VideoConfigResponse {
 class VideoConfigService extends BaseService {
   async getStreamConfig(): Promise<VideoConfigResponse> {
     const response = await fetch(this.getFullUrl(API_CONFIG.endpoints.video.streams), {
-      method: 'POST',
+      method: 'GET',
       headers: this.getDefaultHeaders(),
     })
 
@@ -19,7 +19,7 @@ class VideoConfigService extends BaseService {
   private async handleResponse(response: Response): Promise<VideoConfigResponse> {
     if (!response.ok) {
       const errorData = await response.json()
-      throw new Error(errorData.message || 'Ошибка аутентификации')
+      throw new Error(errorData.message || 'Ошибка получения конфигурации')
     }
     return response.json()
   }
