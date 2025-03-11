@@ -35,7 +35,7 @@ class VideoStreamService {
     this.socket.onclose = () => {
       this.connectionStatus$.next(false)
       console.log(`❌ Disconnected from ${streamId}`)
-      this.scheduleReconnect(streamId)
+      //this.scheduleReconnect(streamId)
     }
 
     this.socket.onerror = (err) => {

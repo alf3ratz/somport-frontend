@@ -9,7 +9,7 @@ interface VideoConfigResponse {
 class VideoConfigService extends BaseService {
   async getStreamConfig(): Promise<VideoConfigResponse> {
     const response = await fetch(this.getFullUrl(API_CONFIG.endpoints.video.streams), {
-      method: 'POST',
+      method: 'GET',
       headers: this.getDefaultHeaders(),
     })
 
