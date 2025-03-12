@@ -19,20 +19,28 @@ class FeedConfigService extends BaseService {
       headers: this.getDefaultHeaders(),
     })
 
-    return this.handleResponse(response)
+    return this.handleResponseArray(response)
   }
 
-  async updateConfig(id: number, request: FeedConfigResponse): Promise<FeedConfigResponse[]> {
+  async updateConfig(id: number, request: FeedConfigResponse): Promise<FeedConfigResponse> {
     const response = await fetch(this.getFullUrl(`${API_CONFIG.endpoints.feedConfig.update}/${id}`), {
       method: 'PUT',
       headers: this.getDefaultHeaders(),
-      body: JSON.stringify({ request }),
+      body: JSON.stringify(request),
     })
 
     return this.handleResponse(response)
   }
 
-  private async handleResponse(response: Response): Promise<FeedConfigResponse[]> {
+  private async handleResponseArray(response: Response): Promise<FeedConfigResponse[]> {
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || 'Ошибка получения конфигурации')
+    }
+    return response.json()
+  }
+
+  private async handleResponse(response: Response): Promise<FeedConfigResponse> {
     if (!response.ok) {
       const errorData = await response.json()
       throw new Error(errorData.message || 'Ошибка получения конфигурации')

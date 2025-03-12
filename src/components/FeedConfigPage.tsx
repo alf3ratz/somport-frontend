@@ -121,16 +121,26 @@ const FeedConfigPage: React.FC = () => {
   }
 
   const handleUpdateClick = () => {
-    if (currentConfig == null) {
-      alert('Конфигурация не заполнена')
+    if (!currentConfig) {
+      alert('Конфигурация не выбрана')
       return
     }
     const updateConfig = async () => {
       try {
-        const configs = await FeedConfigService.updateConfig(currentConfig!.id, currentConfig!)
-        setConfigs(configs)
+        console.log(`config: ${JSON.stringify({ currentConfig })}`)
+        const updatedConfig = await FeedConfigService.updateConfig(currentConfig.id, currentConfig)
+        console.log(`updated config: ${JSON.stringify({ updatedConfig })}`)
+        console.log(`configs: ${JSON.stringify({ configs })}`)
+        // Обновляем конфигурацию в списке
+        setConfigs(
+          (prevConfigs) =>
+            prevConfigs.map((config) =>
+              config.id === updatedConfig.id ? updatedConfig : config,
+            ) as FeedConfigResponse[],
+        )
+        setCurrentConfig(updatedConfig) // Устанавливаем обновлённую конфигурацию
       } catch (error) {
-        console.error('Ошибка загрузки конфигураций:', error)
+        console.error('Ошибка обновления конфигурации:', error)
       }
     }
     updateConfig()
@@ -147,20 +157,37 @@ const FeedConfigPage: React.FC = () => {
             max='100'
             value={currentConfig?.config.feedCount || 1}
             onChange={handleFeedCountChange}
+            disabled={!currentConfig}
           />
           <span>{currentConfig?.config.feedCount || 1}</span>
         </SliderContainer>
         <div>
-          <PoolButton active={currentConfig?.config.poolNumber === 1} onClick={() => handlePoolNumberClick(1)}>
+          <PoolButton
+            active={currentConfig?.config.poolNumber === 1}
+            onClick={() => handlePoolNumberClick(1)}
+            disabled={!currentConfig}
+          >
             Бассейн 1
           </PoolButton>
-          <PoolButton active={currentConfig?.config.poolNumber === 2} onClick={() => handlePoolNumberClick(2)}>
+          <PoolButton
+            active={currentConfig?.config.poolNumber === 2}
+            onClick={() => handlePoolNumberClick(2)}
+            disabled={!currentConfig}
+          >
             Бассейн 2
           </PoolButton>
-          <PoolButton active={currentConfig?.config.poolNumber === 3} onClick={() => handlePoolNumberClick(3)}>
+          <PoolButton
+            active={currentConfig?.config.poolNumber === 3}
+            onClick={() => handlePoolNumberClick(3)}
+            disabled={!currentConfig}
+          >
             Бассейн 3
           </PoolButton>
-          <PoolButton active={currentConfig?.config.poolNumber === 4} onClick={() => handlePoolNumberClick(4)}>
+          <PoolButton
+            active={currentConfig?.config.poolNumber === 4}
+            onClick={() => handlePoolNumberClick(4)}
+            disabled={!currentConfig}
+          >
             Бассейн 4
           </PoolButton>
         </div>
@@ -188,8 +215,8 @@ const FeedConfigPage: React.FC = () => {
         )}
       </Content>
       <div>
-        <UpdateButton active={currentConfig?.config.poolNumber !== null} onClick={() => handleUpdateClick()}>
-          Бассейн 1
+        <UpdateButton active={!!currentConfig} onClick={handleUpdateClick} disabled={!currentConfig}>
+          Обновить
         </UpdateButton>
       </div>
     </Container>
