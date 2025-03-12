@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import VideoStream from './components/VideoStream';
 import AuthPage from './components/AuthPage';
 import Dashboard from './components/Dashboard';
+import FeedConfigPage from './components/FeedConfigPage';
 
 function App() {
   const [activeTab, setActiveTab] = useState(0);
@@ -69,6 +70,7 @@ function App() {
                     <Tab label="Вкладка 1" />
                     <Tab label="Вкладка 2" />
                     <Tab label="Вкладка 3" />
+                    <Tab label="Вкладка 4" />
                   </Tabs>
                 </Box>
 
@@ -103,6 +105,11 @@ function App() {
                       <h2>Содержимое 3</h2>
                       <p>Это содержимое третьей вкладки.</p>
                       <VideoStream />
+                    </Typography>
+                  )}
+                  {activeTab === 3 && (
+                    <Typography>
+                      <FeedConfigPage />
                     </Typography>
                   )}
                 </Box>

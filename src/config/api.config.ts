@@ -14,6 +14,13 @@ interface ApiEndpoints {
     streams: string
     status: string
   }
+  feedConfig: {
+    create: string
+    update: string
+    get: string
+    getAll: string
+    delete: string
+  }
 }
 
 interface WebSocketConfig {
@@ -50,6 +57,13 @@ const config: { [key: string]: ApiConfig } = {
         streams: '/video-config/streams',
         status: '/video-config/status',
       },
+      feedConfig: {
+        create: '/feed-config/v1',
+        update: '/feed-config/v1',
+        get: '/feed-config/v1',
+        getAll: '/feed-config/v1/getAll',
+        delete: '/feed-config/v1',
+      },
     },
     websocket: {
       baseUrl: process.env.REACT_APP_WS_URL || 'ws://localhost:8080',
@@ -74,6 +88,13 @@ const config: { [key: string]: ApiConfig } = {
       video: {
         streams: '/video-config/streams',
         status: '/video-config/status',
+      },
+      feedConfig: {
+        create: '/feed-config/v1',
+        update: '/feed-config/v1',
+        get: '/feed-config/v1',
+        getAll: '/feed-config/v1',
+        delete: '/feed-config/v1',
       },
     },
     websocket: {
