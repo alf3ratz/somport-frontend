@@ -27,34 +27,42 @@ function App() {
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center', // Центрирование по горизонтали
                 minHeight: '100vh', // Полная высота экрана
                 padding: '20px',
                 boxSizing: 'border-box',
               }}
             >
-              <h1 style={{ textAlign: 'center' }}>Пример вертикальных табов с Material-UI</h1>
+              {/* Заголовок
+              <Box
+                sx={{
+                  marginBottom: '20px', // Отступ под заголовком
+                }}
+              >
+            
+              </Box> */}
 
-              {/* Вертикальный таб-бар */}
+              {/* Контейнер для таб-бара и содержимого */}
               <Box
                 sx={{
                   display: 'flex',
                   height: 'calc(100vh - 100px)', // Высота минус заголовок
                   width: '100%',
                   maxWidth: '1200px', // Максимальная ширина для адаптивности
-                  marginTop: '20px',
+                  margin: '0 auto', // Центрирование контейнера
                 }}
               >
                 {/* Левая панель с кнопками (закрепленная) */}
                 <Box
                   sx={{
-                    position: 'sticky', // Закрепляем панель при прокрутке
-                    top: '20px', // Отступ сверху
-                    alignSelf: 'flex-start', // Выравниваем по верху
+                    position: 'fixed', // Закрепляем панель
+                    left: '20px', // Отступ слева
+                    top: '120px', // Отступ сверху (высота заголовка + отступ)
+                    bottom: '20px', // Отступ снизу
                     width: '150px',
                     borderRight: 1,
                     borderColor: 'divider',
                     zIndex: 1000,
+                    overflowY: 'auto', // Прокрутка табов
                   }}
                 >
                   <Tabs
@@ -67,10 +75,10 @@ function App() {
                       minWidth: '150px', // Минимальная ширина кнопок
                     }}
                   >
-                    <Tab label="Вкладка 1" />
-                    <Tab label="Вкладка 2" />
-                    <Tab label="Вкладка 3" />
-                    <Tab label="Вкладка 4" />
+                    <Tab label="Авторизация" />
+                    <Tab label="Пользователи" />
+                    <Tab label="Видео с камер" />
+                    <Tab label="Настройка конфигураций" />
                   </Tabs>
                 </Box>
 
@@ -78,32 +86,27 @@ function App() {
                 <Box
                   sx={{
                     flexGrow: 1,
-                    marginLeft: '20px', // Отступ между табами и содержимым
+                    marginLeft: '10px', // Отступ между табами и содержимым (ширина таб-бара + отступ слева)
                     padding: '20px',
                     border: '1px solid #eee',
                     borderRadius: '4px',
                     overflowY: 'auto', // Прокрутка содержимого
-                    maxHeight: 'calc(100vh - 140px)', // Ограничение высоты
+                    maxHeight: 'calc(100vh - 160px)', // Ограничение высоты
+                    width: '100%', // Ширина на всю доступную область
                   }}
                 >
                   {activeTab === 0 && (
                     <Typography>
-                      <h2>Содержимое 1</h2>
-                      <p>Это содержимое первой вкладки.</p>
                       <AuthPage />
                     </Typography>
                   )}
                   {activeTab === 1 && (
                     <Typography>
-                      <h2>Содержимое 2</h2>
-                      <p>Это содержимое второй вкладки.</p>
                       <Dashboard />
                     </Typography>
                   )}
                   {activeTab === 2 && (
                     <Typography>
-                      <h2>Содержимое 3</h2>
-                      <p>Это содержимое третьей вкладки.</p>
                       <VideoStream />
                     </Typography>
                   )}

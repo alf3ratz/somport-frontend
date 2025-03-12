@@ -8,7 +8,7 @@ export interface FeedConfigResponse {
 }
 
 export interface FeedConfigDetails {
-  feedCount: string
+  feedCount: number
   poolNumber: number
 }
 
@@ -17,6 +17,16 @@ class FeedConfigService extends BaseService {
     const response = await fetch(this.getFullUrl(API_CONFIG.endpoints.feedConfig.getAll), {
       method: 'GET',
       headers: this.getDefaultHeaders(),
+    })
+
+    return this.handleResponse(response)
+  }
+
+  async updateConfig(id: number, request: FeedConfigResponse): Promise<FeedConfigResponse[]> {
+    const response = await fetch(this.getFullUrl(`${API_CONFIG.endpoints.feedConfig.update}/${id}`), {
+      method: 'PUT',
+      headers: this.getDefaultHeaders(),
+      body: JSON.stringify({ request }),
     })
 
     return this.handleResponse(response)
