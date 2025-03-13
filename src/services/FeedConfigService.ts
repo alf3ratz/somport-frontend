@@ -32,6 +32,25 @@ class FeedConfigService extends BaseService {
     return this.handleResponse(response)
   }
 
+  async createConfig(request: FeedConfigResponse): Promise<FeedConfigResponse> {
+    const response = await fetch(this.getFullUrl(`${API_CONFIG.endpoints.feedConfig.create}`), {
+      method: 'POST',
+      headers: this.getDefaultHeaders(),
+      body: JSON.stringify(request),
+    })
+
+    return this.handleResponse(response)
+  }
+
+  async deleteConfig(id: number): Promise<FeedConfigResponse> {
+    const response = await fetch(this.getFullUrl(`${API_CONFIG.endpoints.feedConfig.delete}`), {
+      method: 'DELETE',
+      headers: this.getDefaultHeaders(),
+    })
+
+    return this.handleResponse(response)
+  }
+
   private async handleResponseArray(response: Response): Promise<FeedConfigResponse[]> {
     if (!response.ok) {
       const errorData = await response.json()

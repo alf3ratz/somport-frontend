@@ -1,5 +1,8 @@
+// components/FeedConfigPage.tsx
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+
+import Modal from './Modal'
 
 import FeedConfigService, { FeedConfigResponse } from '../services/FeedConfigService'
 
@@ -86,9 +89,28 @@ const UpdateButton = styled.button<{ active: boolean }>`
   }
 `
 
+const CreateButton = styled.button<{ active: boolean }>`
+  padding: 10px 20px;
+  margin: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: ${(props) => (props.active ? '#007bff' : '#fff')};
+  color: ${(props) => (props.active ? '#fff' : '#000')};
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    color 0.3s;
+
+  &:hover {
+    background: ${(props) => (props.active ? '#0056b3' : '#f8f8f8')};
+  }
+`
+
 const FeedConfigPage: React.FC = () => {
   const [configs, setConfigs] = useState<FeedConfigResponse[]>([])
   const [currentConfig, setCurrentConfig] = useState<FeedConfigResponse | null>(null)
+  const [creatingConfig, setCreatingConfig] = useState<FeedConfigResponse | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     const fetchConfigs = async () => {
@@ -105,18 +127,25 @@ const FeedConfigPage: React.FC = () => {
 
   const handleConfigChange = (config: FeedConfigResponse) => {
     setCurrentConfig(config)
+    setCreatingConfig(null)
+    setModalOpen(true)
   }
 
   const handleFeedCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (currentConfig) {
       const newFeedCount = parseInt(event.target.value, 10)
       setCurrentConfig({ ...currentConfig, config: { ...currentConfig.config, feedCount: newFeedCount } })
+    } else if (creatingConfig) {
+      const newFeedCount = parseInt(event.target.value, 10)
+      setCreatingConfig({ ...creatingConfig, config: { ...creatingConfig.config, feedCount: newFeedCount } })
     }
   }
 
   const handlePoolNumberClick = (poolNumber: number) => {
     if (currentConfig) {
       setCurrentConfig({ ...currentConfig, config: { ...currentConfig.config, poolNumber } })
+    } else if (creatingConfig) {
+      setCreatingConfig({ ...creatingConfig, config: { ...creatingConfig.config, poolNumber } })
     }
   }
 
@@ -127,18 +156,13 @@ const FeedConfigPage: React.FC = () => {
     }
     const updateConfig = async () => {
       try {
-        console.log(`config: ${JSON.stringify({ currentConfig })}`)
         const updatedConfig = await FeedConfigService.updateConfig(currentConfig.id, currentConfig)
-        console.log(`updated config: ${JSON.stringify({ updatedConfig })}`)
-        console.log(`configs: ${JSON.stringify({ configs })}`)
         // Обновляем конфигурацию в списке
-        setConfigs(
-          (prevConfigs) =>
-            prevConfigs.map((config) =>
-              config.id === updatedConfig.id ? updatedConfig : config,
-            ) as FeedConfigResponse[],
+        setConfigs((prevConfigs) =>
+          prevConfigs.map((config) => (config.id === updatedConfig.id ? updatedConfig : config)),
         )
         setCurrentConfig(updatedConfig) // Устанавливаем обновлённую конфигурацию
+        setModalOpen(false) // Закрываем модальное окно
       } catch (error) {
         console.error('Ошибка обновления конфигурации:', error)
       }
@@ -146,51 +170,60 @@ const FeedConfigPage: React.FC = () => {
     updateConfig()
   }
 
+  const handleCreateClick = () => {
+    const newConfig: FeedConfigResponse = {
+      id: Date.now(), // Временный ID для нового конфига
+      config: {
+        feedCount: 1,
+        poolNumber: 1,
+      },
+    }
+    setCreatingConfig(newConfig)
+    //setCurrentConfig(null)
+    setModalOpen(true)
+  }
+
+  const handleSaveConfig = (config: FeedConfigResponse) => {
+    if (creatingConfig) {
+      // Создание новой конфигурации
+      const createConfig = async () => {
+        try {
+          const createdConfig = await FeedConfigService.createConfig(creatingConfig)
+          setConfigs((prevConfigs) => [...prevConfigs, createdConfig])
+          setCurrentConfig(createdConfig)
+          setCreatingConfig(null)
+          setModalOpen(false)
+        } catch (error) {
+          console.error('Ошибка создания конфигурации:', error)
+        }
+      }
+      createConfig()
+    } else if (currentConfig) {
+      // Обновление существующей конфигурации
+      handleUpdateClick()
+    }
+  }
+
+  const handleDeleteConfig = (config: FeedConfigResponse) => {
+    const deleteConfig = async () => {
+      try {
+        await FeedConfigService.deleteConfig(config.id)
+        setConfigs((prevConfigs) => prevConfigs.filter((c) => c.id !== config.id))
+        setCurrentConfig(null)
+        setModalOpen(false)
+      } catch (error) {
+        console.error('Ошибка удаления конфигурации:', error)
+      }
+    }
+    deleteConfig()
+  }
+
   return (
     <Container>
       <Sidebar>
-        <SliderContainer>
-          <SliderLabel>Feed Count:</SliderLabel>
-          <SliderInput
-            type='range'
-            min='1'
-            max='100'
-            value={currentConfig?.config.feedCount || 1}
-            onChange={handleFeedCountChange}
-            disabled={!currentConfig}
-          />
-          <span>{currentConfig?.config.feedCount || 1}</span>
-        </SliderContainer>
-        <div>
-          <PoolButton
-            active={currentConfig?.config.poolNumber === 1}
-            onClick={() => handlePoolNumberClick(1)}
-            disabled={!currentConfig}
-          >
-            Бассейн 1
-          </PoolButton>
-          <PoolButton
-            active={currentConfig?.config.poolNumber === 2}
-            onClick={() => handlePoolNumberClick(2)}
-            disabled={!currentConfig}
-          >
-            Бассейн 2
-          </PoolButton>
-          <PoolButton
-            active={currentConfig?.config.poolNumber === 3}
-            onClick={() => handlePoolNumberClick(3)}
-            disabled={!currentConfig}
-          >
-            Бассейн 3
-          </PoolButton>
-          <PoolButton
-            active={currentConfig?.config.poolNumber === 4}
-            onClick={() => handlePoolNumberClick(4)}
-            disabled={!currentConfig}
-          >
-            Бассейн 4
-          </PoolButton>
-        </div>
+        <CreateButton active={true} onClick={handleCreateClick}>
+          Создать
+        </CreateButton>
       </Sidebar>
       <StreamList>
         {configs.map((config) => (
@@ -214,11 +247,13 @@ const FeedConfigPage: React.FC = () => {
           </div>
         )}
       </Content>
-      <div>
-        <UpdateButton active={!!currentConfig} onClick={handleUpdateClick} disabled={!currentConfig}>
-          Обновить
-        </UpdateButton>
-      </div>
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        config={creatingConfig || currentConfig}
+        onSave={handleSaveConfig}
+        onDelete={handleDeleteConfig}
+      />
     </Container>
   )
 }
